@@ -1,0 +1,1522 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mohamed Alaa Portfolio</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            DEFAULT: 'var(--primary)',
+                            dark: 'var(--primary-dark)'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Cairo:wght@400;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Three.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <!-- Favicon Section -->
+    <link rel="icon" type="image/png" href="LOGOEE.png">
+    <link rel="apple-touch-icon" href="LOGOEE.png">
+    <link rel="shortcut icon" href="LOGOEE.png">
+    <!-- End Favicon Section -->
+
+    <style>
+        :root {
+            --bg: #e0e0e0;
+            --text: #444444;
+            --shadow-dark: #bebebe;
+            --shadow-light: #ffffff;
+            --accent: #2d7dd2;
+            --accent-rgb: 45, 125, 210;
+            --primary: #2d7dd2;
+            --primary-dark: #00ffd1;
+        }
+
+        html {
+            /* scroll-behavior: smooth; */
+            /* Removed to use custom JS scroll for speed control */
+        }
+
+        [data-theme="dark"] {
+            --bg: #1e1e2e;
+            --text: #e0e0e0;
+            --shadow-dark: #151521;
+            --shadow-light: #27273b;
+            --accent: #00ffd1;
+            --accent-rgb: 0, 255, 209;
+            --primary: #00ffd1;
+            --primary-dark: #00ffd1;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            transition: background-color 0.4s ease, color 0.4s ease;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        [dir="rtl"] {
+            font-family: 'Cairo', sans-serif;
+        }
+
+        /* Neumorphism Styles */
+        .neu-flat {
+            background: var(--bg);
+            box-shadow: 12px 12px 24px var(--shadow-dark),
+                -12px -12px 24px var(--shadow-light);
+            transition: all 0.3s ease;
+        }
+
+        .neu-pressed {
+            background: var(--bg);
+            box-shadow: inset 6px 6px 12px var(--shadow-dark),
+                inset -6px -6px 12px var(--shadow-light);
+        }
+
+        .neu-flat-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(var(--accent-rgb), 0.45),
+                12px 12px 25px var(--shadow-dark),
+                -12px -12px 25px var(--shadow-light);
+        }
+
+        .neu-pressed-hover:hover {
+            box-shadow: inset 4px 4px 10px var(--shadow-dark),
+                inset -4px -4px 10px var(--shadow-light),
+                0 0 20px rgba(0, 0, 0, 0.15),
+                0 0 0 2px var(--accent);
+        }
+
+        .btn-accent {
+            background: var(--accent);
+            color: white;
+            box-shadow: 0 12px 24px rgba(var(--accent-rgb), 0.5);
+        }
+
+        .btn-accent:hover {
+            filter: brightness(1.1);
+            transform: scale(1.02);
+        }
+
+        .btn-accent:active {
+            transform: scale(0.98);
+        }
+
+        /* Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 2.5s ease-out;
+            /* Very slow reveal */
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes pulse-glow {
+
+            0%,
+            100% {
+                opacity: 0.8;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+        }
+
+        .tagline-pulse {
+            animation: pulse-glow 3s infinite ease-in-out;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 10px;
+        }
+
+        /* Welcome Toast - Forced Styles */
+        #welcome-toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+            display: none;
+            animation: slideUp 0.5s ease-out;
+            background: #ffffff !important;
+            color: #000000 !important;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15) !important;
+            border: 1px solid rgba(0, 0, 0, 0.05) !important;
+            border-radius: 24px !important;
+        }
+
+        #welcome-toast p {
+            color: #000000 !important;
+            opacity: 1 !important;
+        }
+
+        #welcome-toast .toast-text {
+            color: #000000 !important;
+        }
+
+        [dir="rtl"] #welcome-toast {
+            right: auto;
+            left: 2rem;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .nav-link.active {
+            background-color: var(--accent);
+            color: white;
+            box-shadow: 0 4px 12px rgba(var(--accent-rgb), 0.3);
+        }
+
+        .nav-link:hover:not(.active) {
+            box-shadow: 0 4px 12px rgba(var(--accent-rgb), 0.2);
+            background-color: rgba(var(--accent-rgb), 0.05);
+        }
+
+        .logo-container {
+            padding: 0.75rem;
+            border-radius: 2rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-img {
+            height: 3rem;
+            /* Increased size */
+            width: auto;
+            object-fit: contain;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            /* This filter makes the logo glow with the accent color */
+            filter: drop-shadow(0 0 10px rgba(var(--accent-rgb), 0.4));
+        }
+
+        .logo-img:hover {
+            transform: scale(1.1) rotate(5deg);
+            filter: drop-shadow(0 0 15px rgba(var(--accent-rgb), 0.6));
+        }
+
+        [data-theme="dark"] .logo-img {
+            filter: brightness(1.2) drop-shadow(0 0 15px rgba(var(--accent-rgb), 0.7));
+        }
+
+        /* Mobile Menu Styles */
+        #mobile-menu-drawer {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            height: 100vh;
+            background-color: #020202;
+            /* Dark background as in the image */
+            z-index: 100;
+            transition: right 0.4s cubic-bezier(0.77, 0.2, 0.05, 1.0);
+            display: flex;
+            flex-direction: column;
+            padding: 2rem;
+            color: white;
+        }
+
+        #mobile-menu-drawer.active {
+            right: 0;
+        }
+
+        [dir="rtl"] #mobile-menu-drawer {
+            right: auto;
+            left: -100%;
+        }
+
+        [dir="rtl"] #mobile-menu-drawer.active {
+            left: 0;
+        }
+
+        .mobile-nav-link {
+            font-size: 1.5rem;
+            font-weight: 500;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: color 0.3s ease;
+        }
+
+        .mobile-nav-link:hover {
+            color: var(--accent);
+        }
+
+        .mobile-nav-link.active {
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        #mobile-menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 90;
+            display: none;
+        }
+
+        #mobile-menu-overlay.active {
+            display: block;
+        }
+
+        /* ===== Mobile Optimization ===== */
+        @media (max-width: 768px) {
+
+            body {
+                overflow-x: hidden;
+            }
+
+            main {
+                padding: 1rem !important;
+            }
+
+            section {
+                margin-bottom: 3rem;
+            }
+
+            /* Hero */
+            #home {
+                min-height: auto;
+                text-align: center;
+            }
+
+            #home .flex {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            #home img {
+                width: 180px !important;
+                height: 180px !important;
+            }
+
+            #home .flex.flex-wrap {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            #home a {
+                font-size: 0.85rem !important;
+                padding: 6px 8px !important;
+                border-radius: 14px !important;
+            }
+
+            #home a i {
+                width: 16px !important;
+                height: 16px !important;
+            }
+
+            /* Grid */
+            #services-container,
+            #skills-container,
+            #projects-container,
+            #certificatesContainer {
+                grid-template-columns: 1fr !important;
+            }
+
+            /* Cards */
+            .neu-flat {
+                border-radius: 25px !important;
+                box-shadow: 6px 6px 12px var(--shadow-dark),
+                    -6px -6px 12px var(--shadow-light);
+            }
+
+            .neu-flat-hover:hover {
+                transform: none;
+            }
+
+            /* Padding */
+            .p-8 {
+                padding: 1.2rem !important;
+            }
+
+            .p-12 {
+                padding: 1.5rem !important;
+            }
+
+            /* Navbar */
+            nav {
+                padding: 0.6rem 1rem !important;
+            }
+
+            /* Form */
+            input,
+            textarea {
+                font-size: 14px;
+            }
+
+            /* Toast */
+            #welcome-toast {
+                right: 1rem;
+                left: 1rem;
+                bottom: 1rem;
+            }
+
+            #contact-info-container span {
+                font-size: 0.85rem !important;
+                word-break: break-all;
+                overflow-wrap: anywhere;
+                line-height: 1.4;
+            }
+
+            /* تحسين شكل النصوص الصغيرة */
+            #contact-info-container .text-\[10px\] {
+                font-size: 9px !important;
+            }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 640px) {
+            .text-4xl {
+                font-size: 2.5rem;
+            }
+
+            .text-6xl {
+                font-size: 3.5rem;
+            }
+
+            .p-8 {
+                padding: 1.5rem;
+            }
+
+            .md\:p-12 {
+                padding: 1.5rem;
+            }
+
+            @media (max-width: 768px) {
+
+                #mobile-menu-drawer {
+                    overflow-y: auto;
+                    -webkit-overflow-scrolling: touch;
+                    /* مهم جدًا للموبايل */
+                    scroll-behavior: smooth;
+                }
+
+                #mobile-nav-links {
+                    padding-bottom: 2rem;
+                }
+            }
+        }
+
+        /* Floating Animation for Hero Icon */
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        .hero-icon-container {
+            z-index: 10;
+            animation: float 3s ease-in-out infinite;
+            background: linear-gradient(135deg, var(--accent), #4f46e5);
+            box-shadow: 0 10px 25px -5px rgba(var(--accent-rgb), 0.4),
+                0 8px 10px -6px rgba(var(--accent-rgb), 0.4);
+            filter: drop-shadow(0 0 8px rgba(var(--accent-rgb), 0.3));
+        }
+
+        .hero-icon-container:hover {
+            transform: scale(1.1) rotate(5deg);
+            animation-play-state: paused;
+        }
+
+        /* 3D Background Canvas */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-inherit/80 backdrop-blur-md border-b border-black/5 p-4">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3 group cursor-pointer">
+                <div class="neu-pressed logo-container group-hover:shadow-lg group-hover:scale-105">
+                    <img src="LOGOEE.png" alt="Mohamed Alaa Logo" class="logo-img">
+                </div>
+                <span class="text-2xl font-bold text-[var(--accent)] hidden sm:inline-block"></span>
+            </div>
+
+            <div class="hidden md:flex gap-2 font-semibold" id="nav-links">
+                <a href="#home" data-t="nav.home" class="nav-link px-5 py-2 rounded-full transition-all active">Home</a>
+                <a href="#about" data-t="nav.about" class="nav-link px-5 py-2 rounded-full transition-all">About</a>
+                <a href="#services" data-t="nav.services"
+                    class="nav-link px-5 py-2 rounded-full transition-all">Services</a>
+                <a href="#skills" data-t="nav.skills" class="nav-link px-5 py-2 rounded-full transition-all">Skills</a>
+                <a href="#education" data-t="nav.education"
+                    class="nav-link px-5 py-2 rounded-full transition-all">Education</a>
+                <a href="#projects" data-t="nav.projects"
+                    class="nav-link px-5 py-2 rounded-full transition-all">Projects</a>
+                <a href="#certificates" data-t="nav.certificates"
+                    class="nav-link px-5 py-2 rounded-full transition-all">Certificates</a>
+                <a href="#contact" data-t="nav.contact"
+                    class="nav-link px-5 py-2 rounded-full transition-all">Contact</a>
+            </div>
+
+            <div class="flex gap-4 items-center">
+                <button id="theme-toggle" class="neu-flat neu-flat-hover px-4 py-2 rounded-full hidden sm:block">
+                    <i data-lucide="moon" id="theme-icon" class="w-5 h-5"></i>
+                </button>
+                <button id="mobile-menu-toggle" class="md:hidden neu-flat neu-flat-hover p-2 rounded-xl">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 3D Background Canvas -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Mobile Menu Drawer -->
+    <div id="mobile-menu-overlay"></div>
+    <div id="mobile-menu-drawer">
+        <div class="flex justify-between items-center mb-12">
+            <span class="text-3xl font-bold">M.A</span>
+            <button id="mobile-menu-close" class="p-2">
+                <i data-lucide="x" class="w-8 h-8"></i>
+            </button>
+        </div>
+        <div class="flex flex-col gap-2" id="mobile-nav-links">
+            <a href="#home" data-t="nav.home" class="mobile-nav-link">Home</a>
+            <a href="#about" data-t="nav.about" class="mobile-nav-link">About</a>
+            <a href="#services" data-t="nav.services" class="mobile-nav-link">Services</a>
+            <a href="#skills" data-t="nav.skills" class="mobile-nav-link">Skills</a>
+            <a href="#education" data-t="nav.education" class="mobile-nav-link">Education</a>
+            <a href="#projects" data-t="nav.projects" class="mobile-nav-link">Projects</a>
+            <a href="#certificates" data-t="nav.certificates" class="mobile-nav-link">Certificates</a>
+            <a href="#contact" data-t="nav.contact" class="mobile-nav-link">Contact</a>
+            <button id="mobile-theme-toggle"
+                class="mt-4 self-center flex items-center justify-center w-12 h-12 rounded-full bg-white/10 text-white">
+                <i data-lucide="moon" class="w-5 h-5"></i>
+            </button>
+        </div>
+    </div>
+
+    <main class="max-w-6xl mx-auto px-4 py-12 space-y-32">
+
+        <!-- Home Section -->
+        <section id="home" al scroll-mt-32 min-h-[80vh] flex items-center">
+            <div class="w-full flex flex-col md:flex-row items-center justify-between gap-12 py-12">
+                <!-- Text Content - Now on the left side -->
+                <div class="flex-1 text-center md:text-left rtl:md:text-right space-y-6">
+                    <div class="block md:hidden flex justify-center items-center mt-2 w-full">
+                        <div
+                            class="w-44 h-44 rounded-full neu-flat neu-flat-hover p-2 overflow-hidden border-4 border-[var(--accent)] shadow-2xl transition-transform duration-500 group-hover:scale-105 mx-auto">
+                            <img src="myphoto.png" alt="Mohamed Alaa" class="w-full h-full object-cover rounded-full">
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <h3 class="text-xl md:text-2xl font-semibold opacity-70" data-t="home.greeting">Hello I'm,</h3>
+                        <h1 class="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight" data-t="home.name">Mohamed
+                            Alaa</h1>
+                        <h2 class="text-2xl md:text-4xl font-bold text-[var(--accent)]" data-t="home.titles">Data
+                            Analyst | Power BI Developer</h2>
+                    </div>
+
+                    <div class="neu-pressed px-8 py-4 rounded-3xl tagline-pulse inline-block">
+                        <p class="text-2xl md:text-3xl font-mono font-bold tracking-widest text-[var(--accent)]">Where
+                            Data Meets Insights!</p>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row justify-center md:justify-start gap-4 mt-8">
+                        <a href="https://sciencesohagedu-my.sharepoint.com/:b:/g/personal/mohamed2601875_science_sohag_edu_eg/IQDC634f-WgjRZIcn4i0mT52AXXVej7c0NwLZFFLF9fSEfw?e=cDqqbm"
+                            target="_blank"
+                            class="btn-accent px-4 py-2 rounded-2xl font-bold text-lg flex items-center gap-2">
+                            <i data-lucide="file-text" class="w-5 h-5"></i>
+                            <span data-t="home.resume">My Resume</span>
+                        </a>
+                        <a href="#projects"
+                            class="neu-flat neu-flat-hover px-4 py-2 rounded-2xl font-bold text-lg flex items-center gap-1">
+                            <i data-lucide="layout-grid" class="w-5 h-5"></i>
+                            <span data-t="home.projects">My Projects</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Profile Image and Icon - Desktop only -->
+                <div class="hidden md:flex flex-shrink-0 relative group items-end justify-end">
+                    <div
+                        class="w-52 h-52 md:w-72 md:h-72 rounded-full neu-flat neu-flat-hover p-2 overflow-hidden border-4 border-[var(--accent)] shadow-2xl transition-transform duration-500 group-hover:scale-105">
+                        <img src="myphoto.png" alt="Mohamed Alaa" class="w-full h-full object-cover rounded-full">
+                    </div>
+                    <!-- Icon positioned bottom-left of the image, larger and more visible -->
+                    <div
+                        class="absolute -bottom-4 -left-4 hero-icon-container text-white p-5 rounded-full border-4 border-white dark:border-[#1e1e2e] transition-all duration-300 shadow-xl">
+                        <i data-lucide="bar-chart-3" class="w-6 h-6"></i>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="reveal scroll-mt-32">
+            <h2 class="text-3xl font-bold mb-12 flex items-center gap-4">
+                <i data-lucide="user" class="text-[var(--accent)]"></i>
+                <span data-t="nav.about">About Me</span>
+            </h2>
+            <div class="neu-flat neu-flat-hover rounded-[50px] p-8 md:p-12">
+                <div class="text-center md:text-left rtl:md:text-right">
+                    <p class="text-xl opacity-80 leading-relaxed mb-8" data-t="about.description">
+                        I assist businesses in converting complex data into clear, actionable decisions through accurate
+                        analysis and simplified insights. I am proficient in Python, SQL, Excel, and Power BI.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="reveal scroll-mt-32">
+            <h2 class="text-3xl font-bold mb-12 flex items-center gap-4">
+                <i data-lucide="sparkles" class="text-[var(--accent)]"></i>
+                <span data-t="services.title">My Services</span>
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="services-container">
+                <!-- Services injected by JS -->
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills" class="reveal scroll-mt-32">
+            <h2 class="text-3xl font-bold mb-12 flex items-center gap-4">
+                <i data-lucide="code" class="text-[var(--accent)]"></i>
+                <span data-t="skills.title">Technical Skills</span>
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8" id="skills-container">
+                <!-- Skills injected by JS -->
+            </div>
+        </section>
+
+        <!-- Languages Section -->
+        <section id="languages" class="reveal scroll-mt-32">
+            <h2 class="text-3xl font-bold mb-12 flex items-center gap-4">
+                <i data-lucide="languages" class="text-[var(--accent)]"></i>
+                <span data-t="languages.title">Language Skills</span>
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="languages-container">
+                <!-- Languages injected by JS -->
+            </div>
+        </section>
+
+        <!-- Education Section -->
+        <section id="education" class="reveal scroll-mt-32">
+            <h2 class="text-3xl font-bold mb-12 flex items-center gap-4">
+                <i data-lucide="graduation-cap" class="text-[var(--accent)]"></i>
+                <span data-t="education.title">Education</span>
+            </h2>
+            <div
+                class="neu-flat neu-flat-hover rounded-[40px] p-8 md:p-12 flex flex-col md:flex-row justify-between items-center gap-8">
+                <div class="space-y-4 text-center md:text-left rtl:md:text-right">
+                    <h3 class="text-2xl font-bold text-[var(--accent)]" data-t="education.university">Sohag University,
+                        Faculty of Science</h3>
+                    <p class="text-xl font-semibold" data-t="education.degree">Mathematical Statistics and Programming
+                    </p>
+                    <p class="opacity-60 flex items-center justify-center md:justify-start gap-2">
+                        <i data-lucide="calendar" class="w-4 h-4"></i>
+                        <span data-t="education.date">Sep 2023 - Present</span>
+                    </p>
+                </div>
+                <div class="neu-pressed px-10 py-6 rounded-[30px] text-center min-w-[180px]">
+                    <span class="text-xs font-bold uppercase opacity-50 block mb-1" data-t="education.gpa">GPA</span>
+                    <span class="text-4xl font-bold text-[var(--accent)]">3.7</span>
+                    <p class="text-sm font-bold uppercase tracking-widest mt-2" data-t="education.grade">Excellent</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="reveal scroll-mt-32">
+            <h2 class="text-3xl font-bold mb-12 flex items-center gap-4">
+                <i data-lucide="briefcase" class="text-[var(--accent)]"></i>
+                <span data-t="projects.title">Project Showcase</span>
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="projects-container">
+                <!-- Projects injected by JS -->
+            </div>
+            <div class="mt-12 flex justify-center">
+                <a href="https://github.com/Mohamed-Alaa-Aboelnaga?tab=repositories" target="_blank"
+                    rel="noopener noreferrer"
+                    class="gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 h-10 px-8 py-2 bg-primary dark:bg-primary-dark hover:opacity-90 text-white flex items-center justify-center">
+                    <i data-lucide="external-link" class="mr-2 h-4 w-4"></i>
+                    <span data-t="projects.viewAll">View All Projects</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Certificates Section -->
+        <section id="certificates" class="reveal scroll-mt-32">
+            <h2 class="text-3xl font-bold mb-12 flex items-center gap-4">
+                <i data-lucide="award" class="text-[var(--accent)]"></i>
+                <span data-t="certificates.title">Certificates</span>
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="certificatesContainer">
+                <!-- Certificates injected by JS -->
+            </div>
+            <div class="mt-12 flex justify-center">
+                <a href="https://sciencesohagedu-my.sharepoint.com/:f:/g/personal/mohamed2601875_science_sohag_edu_eg/IgCz7jpqJQOfQIf4UH0XVDISAaQjLNhWyQNRLyzuDI0P7LA?e=3we6cD"
+                    target="_blank"
+                    class="gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 h-10 px-8 py-2 bg-primary dark:bg-primary-dark hover:opacity-90 text-white flex items-center justify-center">
+                    <i data-lucide="external-link" class="mr-2 h-4 w-4"></i>
+                    <span data-t="certificates.viewAll">View All Certificates</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="reveal scroll-mt-32 pb-24">
+            <h2 class="text-3xl font-bold mb-12 flex items-center gap-4">
+                <i data-lucide="mail" class="text-[var(--accent)]"></i>
+                <span data-t="contact.title">Get In Touch</span>
+            </h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div class="neu-flat neu-flat-hover p-8 rounded-[40px] space-y-8">
+                    <div>
+                        <h3 class="text-2xl font-bold text-[var(--accent)] mb-2" data-t="contact.infoTitle">Contact
+                            Information</h3>
+                        <p class="opacity-70" data-t="contact.infoSub">Let's connect! I’m open to opportunities.</p>
+                    </div>
+                    <div class="space-y-6" id="contact-info-container">
+                        <!-- Contact info injected by JS -->
+                    </div>
+                    <!-- Logo under contact info -->
+                    <br>
+                    <div class="flex justify-center mt-8">
+                        <img src="LOGOEE.png" alt="Logo" class="w-24 h-auto">
+                    </div>
+                </div>
+
+
+                <div class="neu-flat neu-flat-hover p-8 rounded-[40px]">
+                    <h3 class="text-2xl font-bold text-[var(--accent)] mb-6" data-t="contact.formTitle">Send Me a
+                        Message</h3>
+                    <form id="contact-form" class="space-y-6">
+                        <div class="space-y-2">
+                            <label class="text-xs font-bold uppercase opacity-50 ml-2 rtl:mr-2"
+                                data-t="contact.name">Name</label>
+                            <input type="text" required
+                                class="w-full neu-pressed bg-transparent rounded-2xl px-6 py-4 focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/50 transition-all">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-xs font-bold uppercase opacity-50 ml-2 rtl:mr-2"
+                                data-t="contact.subject">Subject</label>
+                            <input type="text" required
+                                class="w-full neu-pressed bg-transparent rounded-2xl px-6 py-4 focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/50 transition-all">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-xs font-bold uppercase opacity-50 ml-2 rtl:mr-2"
+                                data-t="contact.message">Message</label>
+                            <textarea rows="5" required
+                                class="w-full neu-pressed bg-transparent rounded-2xl px-6 py-4 focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/50 transition-all resize-none"></textarea>
+                        </div>
+                        <button type="submit"
+                            class="w-full btn-accent py-5 rounded-2xl font-bold text-lg transition-all"
+                            data-t="contact.send">
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="text-center p-12 opacity-50 border-t border-black/5">
+        <p>© <span id="year"></span> Mohamed Alaa. <span data-t="footer">Built with Vanilla JS & Tailwind.</span></p>
+    </footer>
+
+    <!-- Welcome Toast -->
+    <div id="welcome-toast" class="p-6 flex items-center gap-4">
+        <div class="text-[var(--accent)]"><i data-lucide="user"></i></div>
+        <div class="toast-text">
+            <p class="font-bold text-sm" data-t="welcome.title">Welcome to my portfolio!</p>
+            <p class="text-xs" data-t="welcome.sub">Thank you for visiting 🥰</p>
+        </div>
+        <button id="close-toast" class="ml-4 text-[var(--accent)]">
+            <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+    </div>
+
+    <script>
+        // --- Translations ---
+        const translations = {
+            en: {
+                nav: { home: "Home", about: "About", services: "Services", skills: "Skills", education: "Education", projects: "Projects", certificates: "Certificates", contact: "Contact" },
+                home: { greeting: "Hello I'm,", name: "Mohamed Alaa", titles: "Data Analyst | Power BI Developer", resume: "My Resume", projects: "My Projects" },
+                about: { description: "I assist businesses in converting complex data into clear, actionable decisions through accurate analysis and simplified insights. I am proficient in Python, SQL, Excel, and Power BI." },
+                services: { title: "My Services" },
+                skills: { title: "Technical Skills", specialties: "Specialties" },
+                languages: { title: "Language Skills" },
+                education: { title: "Education", university: "Sohag University, Faculty of Science", degree: "Mathematical Statistics and Programming", date: "Sep 2023 - Present", gpa: "GPA", grade: "Excellent" },
+                projects: { title: "Project Showcase", viewDetails: "View Details", viewGithub: "View on GitHub", viewAll: "View All Projects" },
+                certificates: { title: "Certificates", viewCertificate: "View Certificate", viewAll: "View All Certificates" },
+                contact: { title: "Get In Touch", infoTitle: "Contact Information", infoSub: "Let's connect! I’m open to opportunities.", formTitle: "Send Me a Message", name: "Name", subject: "Subject", message: "Message", send: "Send Message", email: "Email", phone: "Phone / WhatsApp", location: "Location", locationVal: "Sohag, Egypt", linkedin: "LinkedIn", github: "GitHub" },
+                footer: "Built with Vanilla JS & Tailwind.",
+                welcome: { title: "Welcome to my portfolio!", sub: "Thank you for visiting 🥰" }
+            },
+        };
+
+        const servicesData = [
+            {
+                titleEn: "Data Analysis & Insights",
+                titleAr: "تحليل البيانات والرؤى",
+                descEn: "Transform raw data into clear insights, helping you make informed decisions and spot trends easily.",
+                descAr: "تحويل البيانات الخام إلى رؤى واضحة، مما يساعدك على اتخاذ قرارات مدروسة وتحديد الاتجاهات بسهولة.",
+                icon: "bar-chart-3"
+            },
+            {
+                titleEn: "Dashboard & Reporting (Power BI / Excel)",
+                titleAr: "لوحات القيادة والتقارير (Power BI / Excel)",
+                descEn: "Create interactive dashboards and automated reports to track performance and KPIs in real time.",
+                descAr: "إنشاء لوحات قيادة تفاعلية وتقارير مؤتمتة لتتبع الأداء ومؤشرات الأداء الرئيسية في الوقت الفعلي.",
+                icon: "layout-dashboard"
+            },
+            {
+                titleEn: "Data Cleaning & Preparation (Python / SQL / Excel)",
+                titleAr: "تنظيف وتجهيز البيانات (Python / SQL / Excel)",
+                descEn: "Organize, clean, and structure your data for accurate and reliable analysis.",
+                descAr: "تنظيم وتنظيف وهيكلة بياناتك لإجراء تحليل دقيق وموثوق.",
+                icon: "filter"
+            },
+            {
+                titleEn: "Ad-hoc Analysis & Consultation",
+                titleAr: "التحليل المخصص والاستشارات",
+                descEn: "Answer specific business questions with tailored analysis, giving you actionable recommendations.",
+                descAr: "الإجابة على أسئلة عمل محددة من خلال تحليل مخصص، مما يمنحك توصيات قابلة للتنفيذ.",
+                icon: "search"
+            },
+            {
+                titleEn: "Statistical Analysis & Forecasting",
+                titleAr: "التحليل الإحصائي والتنبؤ",
+                descEn: "Apply descriptive stats, regression, and confidence intervals to understand patterns and predict outcomes.",
+                descAr: "تطبيق الإحصاء الوصفي والانحدار وفترات الثقة لفهم الأنماط والتنبؤ بالنتائج.",
+                icon: "trending-up"
+            },
+            {
+
+                titleEn: "Math, Statistics & Programming Tutoring",
+                titleAr: "شرح الرياضيات والإحصاء والبرمجة",
+                descEn: "Comprehensive tutoring in Mathematics, Statistics, and Programming with practical examples, problem-solving, and exam preparation.",
+                descAr: "شرح شامل لمواد الرياضيات والإحصاء والبرمجة مع أمثلة عملية، وحل المسائل، والاستعداد للامتحانات.",
+                icon: "graduation-cap"
+            }
+
+        ];
+
+        const projectsData = [
+
+            {
+                id: 'Sales & Returns Analysis',
+                titleEn: 'Sales & Returns Analysis',
+                descEn: 'The goal is to try to determine the reason for the high volume of returns in the sales data and to find a solution to reduce the number of returns.',
+                tagsEn: ['Power BI', 'DAX', 'Power Query', 'Galaxy Schema', 'Excel', 'Data Cleaning'],
+                image: 'FP.jpeg',
+                github: 'https://github.com/Mohamed-Alaa-Aboelnaga/Sales-Returns-Analysis-Power-BI-Project'
+            },
+            {
+                id: 'Python-Netflix-EDA',
+                titleEn: 'Python-Netflix-EDA',
+                descEn: 'Data Analysis Project: Exploring Netflix Movies from the 1990s.',
+                tagsEn: ['Python(Pandas, Seaborn , Matplotlib)', 'EDA'],
+                image: 'https://economyplusme.com/app/uploads/2025/12/1765141906_850_100019_1931.jpg',
+                github: 'https://github.com/Mohamed-Alaa-Aboelnaga/Python-Netflix-EDA.git'
+            },
+            {
+                id: 'Tea-Sales',
+                titleEn: 'B2C Tea Sales Performance Analysis',
+                descEn: 'B2C Power BI Dashboard designed to analyze the sales performance, cost structures, and market dynamics of a tea company.',
+                tagsEn: ['Power BI', 'DAX', 'Power Query', 'Data Modeling', 'Excel'],
+                image: 'sales.png',
+                github: 'https://github.com/Mohamed-Alaa-Aboelnaga/B2C-Tea-Sales-Performance-Analysis.git'
+            },
+            {
+                id: 'algo-pharma',
+                titleEn: 'Algo-Pharma Database',
+                titleAr: 'قاعدة بيانات Algo-Pharma',
+                descEn: 'Led a team to develop a database system for a pharmaceutical warehouse using Microsoft Access.',
+                descAr: 'قدت فريقاً لتطوير نظام قاعدة بيانات لمستودع أدوية باستخدام Microsoft Access.',
+                tagsEn: ['SQL', 'Team Leader'],
+                tagsAr: ['SQL', 'قائد فريق'],
+                image: 'https://picsum.photos/seed/pharma/600/400',
+                github: 'https://github.com/Mohamed-Alaa-Aboelnaga'
+            },
+            {
+                id: 'Python-NYC Schools-EDA',
+                titleEn: 'Python-NYC Schools-EDA',
+                descEn: 'Data Analysis Project: Exploring NYC Schools Statistics.',
+                tagsEn: ['Pandas', 'Descriptive Statistics', 'EDA'],
+                image: 'schoolbus.jpg',
+                github: 'https://github.com/Mohamed-Alaa-Aboelnaga/Python-NYC-Schools-EDA'
+            }
+        ];
+
+        const skillsData = [
+            {
+                catEn: 'Programming & Query Languages',
+                catAr: 'لغات البرمجة والاستعلام',
+                icon: 'terminal',
+                itemsEn: ['Python (Pandas, NumPy, Matplotlib)', 'SQL', 'M Language'],
+                itemsAr: ['بايثون (Pandas, NumPy, Matplotlib)', 'SQL', 'لغة M']
+            },
+            {
+                catEn: 'Data Analysis & Machine Learning',
+                catAr: 'تحليل البيانات وتعلم الآلة',
+                icon: 'brain',
+                itemsEn: [
+                    'Supervised Learning',
+                    'Unsupervised Learning',
+                    'Classification',
+                    'Regression',
+                    'Clustering',
+                    'Scikit-learn',
+                    'Model Evaluation',
+                    'Feature Engineering'
+                ]
+            },
+            {
+                catEn: 'Data Visualization & BI',
+                catAr: 'تصور البيانات وذكاء الأعمال',
+                icon: 'pie-chart',
+                itemsEn: ['Power BI', 'Dashboard Design', 'Tableau', 'Excel Charts'],
+                itemsAr: ['Power BI', 'تصميم لوحات القيادة', 'Tableau', 'رسوم إكسل البيانية']
+            },
+            {
+                catEn: 'Excel & Spreadsheets',
+                catAr: 'إكسل وجداول البيانات',
+                icon: 'table',
+                itemsEn: ['Advanced Excel', 'Pivot Tables', 'Power Pivot', 'Power Query', 'Data Cleaning in Excel'],
+                itemsAr: ['إكسل متقدم', 'الجداول المحورية', 'Power Pivot', 'Power Query', 'تنظيف البيانات في إكسل']
+            },
+            {
+                catEn: 'Statistics & Mathematics',
+                catAr: 'الإحصاء والرياضيات',
+                icon: 'binary',
+                itemsEn: ['Descriptive Statistics', 'Probability', 'Hypothesis Testing (t-test, ANOVA)', 'Correlation & Regression'],
+                itemsAr: ['الإحصاء الوصفي', 'الاحتمالات', 'اختبار الفرضيات (t-test, ANOVA)', 'الارتباط والانحدار']
+            },
+            {
+                catEn: 'Tools & Technologies',
+                catAr: 'الأدوات والتقنيات',
+                icon: 'wrench',
+                itemsEn: ['Git & GitHub', 'Jupyter Notebook', 'VS Code'],
+                itemsAr: ['Git & GitHub', 'Jupyter Notebook', 'VS Code']
+            }
+        ];
+
+        const languagesData = [
+            {
+                nameEn: "Arabic",
+                nameAr: "العربية",
+                levelEn: "Native",
+                levelAr: "اللغة الأم",
+                icon: "languages",
+                percent: 100
+            },
+            {
+                nameEn: "English",
+                nameAr: "الإنجليزية",
+                levelEn: "Very Good",
+                levelAr: "كفاءة مهنية كاملة",
+                icon: "globe",
+                percent: 85
+            }
+        ];
+
+        const certificatesData = [
+            {
+                titleEn: "Google Data Analytics",
+                sourceEn: "Coursera",
+                image: "google.jpg", // ← مهم
+                link: "https://coursera.org/verify/professional-cert/XH29QXE1KUTQ"
+            },
+            {
+                titleEn: "SQL",
+                sourceEn: "365DataScience",
+                image: "sql.png", // ← مهم
+                link: "https://learn.365datascience.com/c/13b060b615/"
+            },
+            {
+                titleEn: "Statistics",
+                sourceEn: "365DataScience",
+                image: "sta.png", // ← مهم
+                link: "https://learn.365datascience.com/c/140d7c594b/"
+            },
+            {
+                titleEn: "AI and Machine Learning",
+                sourceEn: "Sprints & Microsoft",
+                image: "ai.png", // ← مهم
+                link: "https://sprints.ai/en-eg/journeys/learning/ID%20-%20SPR%20-%20U98H2L/view-certificate-serial"
+            },
+            {
+                titleEn: "Track Data Analysis with Excel Power Tools",
+                sourceEn: "DataCamp",
+                image: "excel1.jpeg", // ← مهم
+                link: "https://www.datacamp.com/statement-of-accomplishment/track/d81c07ffa2095b3be5a5dce40c1ac375374f0cf9?raw=1"
+            }
+
+        ];
+
+        const contactData = [
+            {
+                id: 'email',
+                labelEn: 'Email',
+                labelAr: 'البريد الإلكتروني',
+                value: 'Mohamed2601875@science.sohag.edu.eg',
+                link: 'mailto:Mohamed2601875@science.sohag.edu.eg',
+                icon: 'mail'
+            },
+            {
+                id: 'phone',
+                labelEn: 'Phone / WhatsApp',
+                labelAr: 'الهاتف',
+                value: '+20 102 242 7983',
+                link: 'https://wa.me/201022427983',
+                icon: 'phone'
+            },
+            {
+                id: 'location',
+                labelEn: 'Location',
+                labelAr: 'الموقع',
+                valueEn: 'Sohag, Egypt',
+                valueAr: 'سوهاج، مصر',
+                icon: 'map-pin'
+            },
+            {
+                id: 'linkedin',
+                labelEn: 'LinkedIn',
+                labelAr: 'لينكد إن',
+                value: 'linkedin.com/in/mohamed-alaa18',
+                link: 'https://www.linkedin.com/in/mohamed-alaa18',
+                rawSvg: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-linkedin"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect width="4" height="12" x="2" y="9"></rect><circle cx="4" cy="4" r="2"></circle></svg>`
+            },
+            {
+                id: 'github',
+                labelEn: 'GitHub',
+                labelAr: 'جيت هاب',
+                value: 'github.com/Mohamed-Alaa-Aboelnaga',
+                link: 'https://github.com/Mohamed-Alaa-Aboelnaga',
+                rawSvg: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-github"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"></path></svg>`
+            }
+        ];
+
+        // --- State ---
+        let language = 'en';
+        let theme = 'light';
+
+        // --- DOM Elements ---
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        const welcomeToast = document.getElementById('welcome-toast');
+        const closeToast = document.getElementById('close-toast');
+        const contactForm = document.getElementById('contact-form');
+        const yearEl = document.getElementById('year');
+        const servicesContainer = document.getElementById('services-container');
+        const projectsContainer = document.getElementById('projects-container');
+        const skillsContainer = document.getElementById('skills-container');
+        const languagesContainer = document.getElementById('languages-container');
+        const certificatesContainer = document.getElementById("certificatesContainer");
+        const contactInfoContainer = document.getElementById('contact-info-container');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+        const mobileMenuClose = document.getElementById('mobile-menu-close');
+        const mobileMenuDrawer = document.getElementById('mobile-menu-drawer');
+        const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+        const mobileThemeToggle = document.getElementById('mobile-theme-toggle');
+        const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+        const bgCanvas = document.getElementById('bg-canvas');
+
+        // --- 3D Background Logic ---
+        let scene, camera, renderer, particles, velocities;
+        let mouseX = 0, mouseY = 0;
+
+        function init3DBackground() {
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            renderer = new THREE.WebGLRenderer({ canvas: bgCanvas, alpha: true, antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+
+            // Create a circular texture for round particles
+            const canvas = document.createElement('canvas');
+            canvas.width = 64;
+            canvas.height = 64;
+            const context = canvas.getContext('2d');
+            context.beginPath();
+            context.arc(32, 32, 30, 0, Math.PI * 2);
+            context.fillStyle = '#ffffff';
+            context.fill();
+            const texture = new THREE.CanvasTexture(canvas);
+
+            const particlesCount = window.innerWidth < 768 ? 400 : 1200;
+            const positions = new Float32Array(particlesCount * 3);
+            velocities = new Float32Array(particlesCount * 3);
+            const geometry = new THREE.BufferGeometry();
+
+            for (let i = 0; i < particlesCount * 3; i++) {
+                positions[i] = (Math.random() - 0.5) * 10;
+                velocities[i] = (Math.random() - 0.5) * 0.0008; // Very slow background
+            }
+
+            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+            const material = new THREE.PointsMaterial({
+                size: 0.045, // Slightly larger to compensate for rounding
+                color: theme === 'light' ? 0x2d7dd2 : 0x00ffd1,
+                transparent: true,
+                opacity: 0.8,
+                map: texture,
+                alphaTest: 0.5
+            });
+
+            particles = new THREE.Points(geometry, material);
+            scene.add(particles);
+
+            camera.position.z = 3;
+        }
+
+        function update3DTheme() {
+            if (particles) {
+                particles.material.color.setHex(theme === 'light' ? 0x2d7dd2 : 0x00ffd1);
+            }
+        }
+
+        function animate3D() {
+            requestAnimationFrame(animate3D);
+
+            const positions = particles.geometry.attributes.position.array;
+            for (let i = 0; i < positions.length; i++) {
+                positions[i] += velocities[i];
+
+                // Wrap around
+                if (positions[i] > 5) positions[i] = -5;
+                if (positions[i] < -5) positions[i] = 5;
+            }
+            particles.geometry.attributes.position.needsUpdate = true;
+
+            // Subtle overall rotation
+            particles.rotation.y += 0.0001;
+
+            // Mouse interaction
+            particles.position.x += (mouseX * 0.2 - particles.position.x) * 0.02;
+            particles.position.y += (-mouseY * 0.2 - particles.position.y) * 0.02;
+
+            renderer.render(scene, camera);
+        }
+
+        window.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+            mouseY = (e.clientY / window.innerHeight) * 2 - 1;
+        });
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // --- Functions ---
+        function toggleMobileMenu() {
+            mobileMenuDrawer.classList.toggle('active');
+            mobileMenuOverlay.classList.toggle('active');
+            document.body.style.overflow = mobileMenuDrawer.classList.contains('active') ? 'hidden' : '';
+        }
+
+        function updateThemeIcons() {
+            const iconName = theme === 'light' ? 'moon' : 'sun';
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            if (themeToggleBtn) themeToggleBtn.innerHTML = `<i data-lucide="${iconName}" class="w-5 h-5"></i>`;
+            if (mobileThemeToggle) mobileThemeToggle.innerHTML = `<i data-lucide="${iconName}" class="w-6 h-6"></i>`;
+            refreshIcons();
+        }
+
+        function toggleTheme() {
+            theme = theme === 'light' ? 'dark' : 'light';
+            document.body.setAttribute('data-theme', theme);
+            updateThemeIcons();
+            update3DTheme();
+        }
+
+        function refreshIcons() {
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+        }
+
+        function updateDynamicContent() {
+            // Update Projects
+            projectsContainer.innerHTML = projectsData.map(p => `
+                <div class="neu-flat neu-flat-hover rounded-[30px] p-6 group h-full flex flex-col">
+                    <div class="neu-pressed rounded-xl overflow-hidden mb-4 aspect-video relative">
+                        <img src="${p.image}" alt="${language === 'en' ? p.titleEn : p.titleAr}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-[var(--accent)]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                            <i data-lucide="external-link" class="text-white w-8 h-8"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-bold text-[var(--accent)] mb-2">${language === 'en' ? p.titleEn : p.titleAr}</h3>
+                    <p class="text-sm opacity-70 mb-4 flex-grow">${language === 'en' ? p.descEn : p.descAr}</p>
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        ${(language === 'en' ? p.tagsEn : p.tagsAr).map(tag => `
+                            <span class="neu-pressed px-3 py-1.5 rounded-full text-[10px] font-bold">${tag}</span>
+                        `).join('')}
+                    </div>
+                    <a href="${p.github}" target="_blank" class="gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 h-10 px-4 py-2 w-full bg-primary dark:bg-primary-dark hover:bg-primary/90 dark:hover:bg-primary-dark/90 text-white flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-github mr-2 h-4 w-4">
+                            <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"></path>
+                            <path d="M9 18c-4.51 2-5-2-7-2"></path>
+                        </svg>
+                        ${translations[language].projects.viewGithub}
+                    </a>
+                </div>
+            `).join('');
+
+            // Update Skills
+            skillsContainer.innerHTML = skillsData.map(s => `
+                <div class="neu-flat neu-flat-hover p-8 rounded-[35px] space-y-4">
+                    <div class="flex items-center gap-3 mb-2">
+                        <div class="p-2 rounded-lg bg-[var(--accent)]/10 text-[var(--accent)]">
+                            <i data-lucide="${s.icon}" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="font-bold text-xl text-[var(--accent)]">${language === 'en' ? s.catEn : s.catAr}</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        ${(language === 'en' ? s.itemsEn : s.itemsAr).map(item => `
+                            <span class="neu-pressed px-4 py-2 rounded-full text-xs font-semibold">${item}</span>
+                        `).join('')}
+                    </div>
+                    ${(language === 'en' ? s.subEn : s.subAr) ? `
+                        <div class="pt-2">
+                            <span class="text-[10px] font-bold uppercase opacity-50 block mb-2">${translations[language].skills.specialties}:</span>
+                            <div class="flex flex-wrap gap-2">
+                                ${(language === 'en' ? s.subEn : s.subAr).split(',').map(sub => `
+                                    <span class="neu-pressed px-3 py-1.5 rounded-full text-[10px] font-bold">${sub.trim()}</span>
+                                `).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+
+        function updateServicesContent() {
+            if (!servicesContainer) return;
+            servicesContainer.innerHTML = servicesData.map(s => `
+                <div class="neu-flat neu-flat-hover p-8 rounded-[40px] space-y-6 flex flex-col items-center text-center group">
+                    <div class="w-16 h-16 rounded-2xl neu-pressed flex items-center justify-center text-[var(--accent)] transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
+                        <i data-lucide="${s.icon}" class="w-8 h-8"></i>
+                    </div>
+                    <div class="space-y-3">
+                        <h3 class="text-xl font-bold text-[var(--accent)]">${language === 'en' ? s.titleEn : s.titleAr}</h3>
+                        <p class="text-sm opacity-70 leading-relaxed">${language === 'en' ? s.descEn : s.descAr}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateLanguagesContent() {
+            if (!languagesContainer) return;
+            languagesContainer.innerHTML = languagesData.map(l => `
+                <div class="neu-flat neu-flat-hover p-8 rounded-[35px] flex items-center gap-6">
+                    <div class="bg-[var(--accent)]/10 p-4 rounded-2xl text-[var(--accent)]">
+                        <i data-lucide="${l.icon}" class="w-8 h-8"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="font-bold text-xl">${language === 'en' ? l.nameEn : l.nameAr}</h3>
+                            <span class="text-xs font-bold text-[var(--accent)]">${language === 'en' ? l.levelEn : l.levelAr}</span>
+                        </div>
+                        <div class="w-full neu-pressed h-3 rounded-full overflow-hidden">
+                            <div class="bg-[var(--accent)] h-full rounded-full transition-all duration-1000" style="width: ${l.percent}%"></div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateCertificatesContent() {
+            if (!certificatesContainer) return;
+
+            certificatesContainer.innerHTML = certificatesData.map(c => `
+        <div class="neu-flat neu-flat-hover p-6 rounded-[30px] flex flex-col gap-4">
+
+            <!-- Image / Icon -->
+            <div class="overflow-hidden rounded-2xl">
+                <img src="${c.image}" alt="${c.titleEn}" class="w-full h-48 object-cover">
+            </div>
+
+            <!-- Title -->
+            <h3 class="text-xl font-bold text-[var(--accent)]">
+                ${language === 'en' ? c.titleEn : c.titleAr}
+            </h3>
+
+            <!-- Source -->
+            <p class="text-sm opacity-60 font-semibold">
+                ${language === 'en' ? c.sourceEn : c.sourceAr}
+            </p>
+
+            <!-- Button -->
+            <a href="${c.link}" target="_blank"
+               class="mt-2 rounded-md text-sm font-medium h-10 px-6 bg-primary dark:bg-primary-dark hover:opacity-90 text-white flex items-center justify-center gap-2">
+               
+               <i data-lucide="eye" class="w-4 h-4"></i>
+               ${translations[language].certificates.viewCertificate}
+            </a>
+        </div>
+    `).join('');
+        }
+
+        function updateContactContent() {
+            if (!contactInfoContainer) return;
+            contactInfoContainer.innerHTML = contactData.map(c => {
+                const iconHtml = c.rawSvg ? c.rawSvg : `<i data-lucide="${c.icon}" class="w-5 h-5"></i>`;
+                const content = `
+                    <div class="neu-flat neu-flat-hover p-3 rounded-xl text-[var(--accent)] group-hover:scale-110 transition-transform flex items-center justify-center">
+                        ${iconHtml}
+                    </div>
+                    <div>
+                        <span class="text-[10px] font-bold uppercase opacity-40 block">${language === 'en' ? c.labelEn : c.labelAr}</span>
+                        <span class="font-semibold group-hover:text-[var(--accent)] transition-colors">${c.valueEn && language === 'ar' ? c.valueAr : (c.valueEn || c.value)}</span>
+                    </div>
+                `;
+
+                if (c.link) {
+                    return `<a href="${c.link}" target="_blank" class="flex items-center gap-4 group">${content}</a>`;
+                } else {
+                    return `<div class="flex items-center gap-4 group">${content}</div>`;
+                }
+            }).join('');
+        }
+
+        function updateLanguage() {
+            document.documentElement.lang = language;
+            document.documentElement.dir = language === 'ar' ? 'rtl' : 'ltr';
+
+            document.querySelectorAll('[data-t]').forEach(el => {
+                const key = el.getAttribute('data-t');
+                const keys = key.split('.');
+                let value = translations[language];
+
+                for (const k of keys) {
+                    if (value && typeof value === 'object' && value[k] !== undefined) {
+                        value = value[k];
+                    } else {
+                        value = ''; // Fallback
+                        break;
+                    }
+                }
+
+                if (typeof value === 'string') {
+                    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                        el.placeholder = value;
+                    } else {
+                        el.textContent = value;
+                    }
+                }
+            });
+
+            updateDynamicContent();
+            updateServicesContent();
+            updateLanguagesContent();
+            updateCertificatesContent();
+            updateContactContent();
+
+            // Re-initialize all icons
+            setTimeout(refreshIcons, 100);
+        }
+
+        function revealOnScroll() {
+            const reveals = document.querySelectorAll('.reveal');
+            reveals.forEach(el => {
+                const windowHeight = window.innerHeight;
+                const elementTop = el.getBoundingClientRect().top;
+                const elementVisible = 150;
+                if (elementTop < windowHeight - elementVisible) {
+                    el.classList.add('active');
+                }
+            });
+
+            // Scroll Spy for Nav
+            const sections = ['home', 'about', 'services', 'skills', 'languages', 'education', 'projects', 'certificates', 'contact'];
+            let current = 'home';
+            sections.forEach(s => {
+                const el = document.getElementById(s);
+                if (el && window.scrollY >= el.offsetTop - 150) {
+                    current = s;
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+
+            mobileNavLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        // Custom Smooth Scroll Function
+        function customSmoothScroll(target, duration) {
+            const targetElement = document.querySelector(target);
+            if (!targetElement) return;
+
+            const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - 100; // Offset for navbar
+            const startPosition = window.pageYOffset;
+            const distance = targetPosition - startPosition;
+            let startTime = null;
+
+            function animation(currentTime) {
+                if (startTime === null) startTime = currentTime;
+                const timeElapsed = currentTime - startTime;
+                const run = ease(timeElapsed, startPosition, distance, duration);
+                window.scrollTo(0, run);
+                if (timeElapsed < duration) requestAnimationFrame(animation);
+            }
+
+            function ease(t, b, c, d) {
+                t /= d / 2;
+                if (t < 1) return c / 2 * t * t + b;
+                t--;
+                return -c / 2 * (t * (t - 2) - 1) + b;
+            }
+
+            requestAnimationFrame(animation);
+        }
+
+        // --- Event Listeners ---
+        if (mobileMenuToggle) mobileMenuToggle.addEventListener('click', toggleMobileMenu);
+        if (mobileMenuClose) mobileMenuClose.addEventListener('click', toggleMobileMenu);
+        if (mobileMenuOverlay) mobileMenuOverlay.addEventListener('click', toggleMobileMenu);
+        if (mobileThemeToggle) mobileThemeToggle.addEventListener('click', toggleTheme);
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                const href = link.getAttribute('href');
+                if (href.startsWith('#')) {
+                    e.preventDefault();
+                    customSmoothScroll(href, 3000); // 3 seconds for very slow feel
+                }
+            });
+        });
+
+        mobileNavLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                const href = link.getAttribute('href');
+                if (href.startsWith('#')) {
+                    e.preventDefault();
+                    toggleMobileMenu();
+                    setTimeout(() => {
+                        customSmoothScroll(href, 3000);
+                    }, 400);
+                }
+            });
+        });
+
+        themeToggle.addEventListener('click', toggleTheme);
+
+        closeToast.addEventListener('click', () => {
+            welcomeToast.style.display = 'none';
+        });
+
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert(language === 'en' ? 'Message sent successfully!' : 'تم إرسال الرسالة بنجاح!');
+            contactForm.reset();
+        });
+
+        window.addEventListener('scroll', revealOnScroll);
+
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            yearEl.textContent = new Date().getFullYear();
+
+            // Set initial theme icon
+            updateThemeIcons();
+
+            // Initialize 3D Background
+            init3DBackground();
+            animate3D();
+
+            // Update language and content (this will call lucide.createIcons)
+            updateLanguage();
+
+            revealOnScroll();
+
+            setTimeout(() => {
+                welcomeToast.style.display = 'flex';
+            }, 2000);
+        });
+    </script>
+</body>
+
+</html>
