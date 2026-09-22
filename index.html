@@ -820,18 +820,18 @@
         // --- Translations ---
         const translations = {
             en: {
-                nav: {home: "Home", about: "About", services: "Services", skills: "Skills", education: "Education", projects: "Projects", certificates: "Certificates", contact: "Contact"},
-                home: {greeting: "Hello I'm,", name: "Mohamed Alaa", titles: "Data Analyst | Power BI Developer", resume: "My Resume", projects: "My Projects"},
-                about: {description: "I assist businesses in converting complex data into clear, actionable decisions through accurate analysis and simplified insights. I am proficient in Python, SQL, Excel, and Power BI."},
-                services: {title: "My Services"},
-                skills: {title: "Technical Skills", specialties: "Specialties"},
-                languages: {title: "Language Skills"},
-                education: {title: "Education", university: "Sohag University, Faculty of Science", degree: "Mathematical Statistics and Programming", date: "Sep 2023 - Present", gpa: "GPA", grade: "Excellent"},
-                projects: {title: "Project Showcase", viewDetails: "View Details", viewGithub: "View on GitHub", viewAll: "View All Projects"},
-                certificates: {title: "Certificates", viewCertificate: "View Certificate", viewAll: "View All Certificates"},
-                contact: {title: "Get In Touch", infoTitle: "Contact Information", infoSub: "Let's connect! I’m open to opportunities.", formTitle: "Send Me a Message", name: "Name", subject: "Subject", message: "Message", send: "Send Message", email: "Email", phone: "Phone / WhatsApp", location: "Location", locationVal: "Sohag, Egypt", linkedin: "LinkedIn", github: "GitHub"},
+                nav: { home: "Home", about: "About", services: "Services", skills: "Skills", education: "Education", projects: "Projects", certificates: "Certificates", contact: "Contact" },
+                home: { greeting: "Hello I'm,", name: "Mohamed Alaa", titles: "Data Analyst | Power BI Developer", resume: "My Resume", projects: "My Projects" },
+                about: { description: "I assist businesses in converting complex data into clear, actionable decisions through accurate analysis and simplified insights. I am proficient in Python, SQL, Excel, and Power BI." },
+                services: { title: "My Services" },
+                skills: { title: "Technical Skills", specialties: "Specialties" },
+                languages: { title: "Language Skills" },
+                education: { title: "Education", university: "Sohag University, Faculty of Science", degree: "Mathematical Statistics and Programming", date: "Sep 2023 - Present", gpa: "GPA", grade: "Excellent" },
+                projects: { title: "Project Showcase", viewDetails: "View Details", viewGithub: "View on GitHub", viewAll: "View All Projects" },
+                certificates: { title: "Certificates", viewCertificate: "View Certificate", viewAll: "View All Certificates" },
+                contact: { title: "Get In Touch", infoTitle: "Contact Information", infoSub: "Let's connect! I’m open to opportunities.", formTitle: "Send Me a Message", name: "Name", subject: "Subject", message: "Message", send: "Send Message", email: "Email", phone: "Phone / WhatsApp", location: "Location", locationVal: "Sohag, Egypt", linkedin: "LinkedIn", github: "GitHub" },
                 footer: "Built with Vanilla JS & Tailwind.",
-                welcome: {title: "Welcome to my portfolio!", sub: "Thank you for visiting 🥰"}
+                welcome: { title: "Welcome to my portfolio!", sub: "Thank you for visiting 🥰" }
             },
         };
 
@@ -978,7 +978,7 @@
             {
                 titleEn: "Microsoft Power BI Specialist",
                 sourceEn: "Ministry of Communications and Information Technology",
-                image: "depi.jpg", // ← مهم
+                image: "depi.png", // ← مهم
                 link: "https://sciencesohagedu-my.sharepoint.com/:b:/r/personal/mohamed2601875_science_sohag_edu_eg/Documents/Certificates/DEPI.pdf?d=wf1a7c98c4118470fa0e44316d0a44a2a&csf=1&web=1&e=XkIQva"
             },
             {
@@ -1084,7 +1084,7 @@
         function init3DBackground() {
             scene = new THREE.Scene();
             camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            renderer = new THREE.WebGLRenderer({canvas: bgCanvas, alpha: true, antialias: true});
+            renderer = new THREE.WebGLRenderer({ canvas: bgCanvas, alpha: true, antialias: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setPixelRatio(window.devicePixelRatio);
 
